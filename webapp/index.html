@@ -109,7 +109,16 @@
             imageForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const imageInput = document.getElementById('imageInput');
+                // var reader = new FileReader();
+                // reader.onload = function() {
+                //     var base64String = reader.result.replace("data:", "")
+                //         .replace(/^.+,/, "");
+
+                //     console.log(base64String);
+                // }
+                // base64Image = reader.readAsDataURL(imageInput.files[0]);
                 const formData = new FormData();
+                // console.log('base64Image', base64Image);
                 console.log('Image input:', imageInput.files[0]);
                 formData.append('image', imageInput.files[0]);
                 console.log('Form data:', formData);
@@ -117,8 +126,11 @@
                 
 
                 // Make API POST request to AWS Lambda function
-                const lambdaResponse = await fetch('https://upyegyqbgb.execute-api.us-east-1.amazonaws.com/dev', {
+                const lambdaResponse = await fetch('https://upyegyqbgb.execute-api.us-east-1.amazonaws.com/dev/getImagePrediction', {
                     method: 'POST',
+                    headers: {
+                        'Access-Control-Allow-Origin': '*'
+                    },
                     body: formData
                 });
 
