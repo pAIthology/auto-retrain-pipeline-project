@@ -110,15 +110,29 @@
                 e.preventDefault();
                 const imageInput = document.getElementById('imageInput');
                 const formData = new FormData();
+                console.log('Image input:', imageInput.files[0]);
                 formData.append('image', imageInput.files[0]);
+                console.log('Form data:', formData);
 
-                // Make API POST request here and handle response
-                // Example: fetch('/api/classify', { method: 'POST', body: formData })
-                // Parse the response and display it in resultDiv
+                
 
-                // For demonstration purposes, let's assume the response is "Cat"
-                resultDiv.textContent = 'Classification: Cat';
-                feedbackForm.style.display = 'block';
+                // Make API POST request to AWS Lambda function
+                const lambdaResponse = await fetch('https://upyegyqbgb.execute-api.us-east-1.amazonaws.com/dev', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Handle response from AWS Lambda function
+                if (lambdaResponse.ok) {
+                    const lambdaData = await lambdaResponse.json();
+                    console.log('Lambda data:', lambdaData);
+                    resultDiv.textContent = `Classification: ${lambaData}`;
+
+                    // Display feedback form
+                    feedbackForm.style.display = 'block';
+                } else {
+                    console.error('Error: Failed to classify image');
+                }
             });
 
             dropdown.addEventListener('change', () => {
